@@ -1,0 +1,42 @@
+{
+  "name": "auto-add-tags",
+  "version": "0.0.1",
+  "description": "Obtain AST by reading vue and react source code, and then dynamically add tags",
+  "bin": {
+    "aat": "./bin/index",
+    "auto-add-tags": "./bin/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "format": "prettier  --write src/**/*"
+  },
+  "keywords": [],
+  "author": "yuexing <yuexing0921@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@vue/compiler-dom": "^3.0.5",
+    "@vuedx/template-ast-types": "^0.6.0",
+    "chalk": "^4.1.0",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6",
+    "jscodeshift": "^0.11.0",
+    "lodash": "^4.17.20",
+    "lodash-es": "^4.17.15",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.3",
+    "vue-eslint-parser": "^7.3.0",
+    "vue-template-compiler": "^2.6.12",
+    "write-file-atomic": "^3.0.3",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.5"
+  }
+}

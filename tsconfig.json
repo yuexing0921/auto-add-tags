@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es5", // 指定ECMAScript目标版本
+    "sourceMap": true,
+    "declaration": true,
+    "strict": true, // 启用所有严格类型检查选项
+    "skipLibCheck": true,
+    "importHelpers": false, // 从 tslib 导入辅助工具函数（比如 __extends， __rest等）
+    "moduleResolution": "node", //决定如何处理模块。或者是"Node"对于Node.js/io.js，或者是"Classic"（默认）。查看模块解析了解详情
+    "experimentalDecorators": true, // 启用实验性的ES装饰器。
+    "esModuleInterop": true, //  允许从没有设置默认导出的模块中默认导入。这并不影响代码的输出，仅为了类型检查。
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false, // 删除所有注释，除了以 /!*开头的版权信息。
+    "noUnusedLocals": true, // 若有未使用的局部变量则抛错。
+    "noImplicitAny": false, // 在表达式和声明上有隐含的 any类型时报错。
+    "noImplicitThis": false, // 在表达式和声明上有隐含的 this类型时报错。
+    "strictNullChecks": false, // 在严格的 null检查模式下， null和 undefined值不包含在任何类型里，只允许用它们自己和 any来赋值（有个例外， undefined可以赋值到 void）
+    "outDir": "./dist",
+    "baseUrl": "./src", // 解析非相对模块名的基准目录
+    "paths": {
+      // 声明映射 https://www.tslang.cn/docs/handbook/module-resolution.html#base-url
+      "@lib/*": ["_lib/*"],
+      "@/*": ["src/*"]
+    },
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"] //	编译过程中需要引入的库文件的列表
+  },
+  "include": [
+    "src/*.d.ts",
+    "src/**/*.ts",
+    "goctl.d.ts"
+  ],
+  "exclude": ["node_modules/**"]
+}

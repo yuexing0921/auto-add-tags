@@ -1,0 +1,80 @@
+#!/usr/bin/env node
+const fse = require("fs-extra");
+const {  warning, error } = require("../dist/utils");
+const { main } = require("../dist/index")
+
+
+const yargs = require("yargs").options({
+	dir: {
+		alias: "d",
+		describe:
+			"The directory or file to be converted, the default is the current src directory",
+		type: "string",
+		demandOption: true,
+		default: "src",
+	},
+	type: {
+		alias: "t",
+		describe:
+			"The supported type is react by default, and you can also enter vue|react",
+		type: "string",
+		demandOption: true,
+		default: "react",
+	},
+	tagName: {
+		describe: "Automatically insert tags, the default value is data-xt",
+		type: "string",
+		demandOption: true,
+		default: "data-xt",
+	},
+	projectId: {
+		alias: "p",
+		describe:
+			"The project id, will default to 1000000, will increase automatically",
+		type: "number",
+		demandOption: true,
+		default: 1000000,
+	},
+	elementNames: {
+		alias: "e",
+		describe:
+			"Which components need to be tracked? not case sensitive，the default value is [link,a,route]  -e link a route",
+		type: "array",
+		default: ["a", "link", "route"]
+	},
+	eventNames: {
+		describe:
+			"What events need to be tracked? not case sensitive。 the default value is [onclick,onsubmit]  --eventNames onclick onsubmit",
+		type: "array",
+		default: ["click", "submit"]
+	},
+	check: {
+		alias: "c",
+		describe: "Check if there are duplicate tags",
+		type: "boolean",
+		default: false,
+	},
+	resultFile: {
+		alias: "r",
+		describe: "Insert point record",
+		type: "string",
+		default: "tracePoint.json",
+	}
+})
+
+const argv = yargs.argv;
+const result = fse.existsSync(argv.dir);
+if (!result) {
+	warning(argv.dir);
+	error("File or directory does not exist");
+	process.exit(1);
+}
+const options = {
+	type: argv.type,
+	tagName: argv.tagName,
+	projectId: argv.projectId,
+	resultFile: argv.resultFile,
+	elementNames: argv.elementNames,
+	eventNames: argv.eventNames
+};
+main(argv.check, options, argv.dir)
