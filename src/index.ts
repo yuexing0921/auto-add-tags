@@ -4,6 +4,7 @@ import { ModifyVueAST } from "./vue";
 import { success, log, warning, error,isFile } from "./utils";
 import { Option } from  "./interface"
 
+
 /**
  * 
  * @param check 是否直接check有重复的标签
@@ -21,11 +22,13 @@ export async function main(check: boolean, options: Option, dir = "src" ) {
 		console.time("checking tags");
 		const result = await modifyAST.checkRepeatedTag();
 		console.timeEnd("checking tags");
-		if (Object.keys(result).length > 0) {
-			error("There are duplicate tags。。。。");
-			console.log(result);
-		} else {
-			success("No repeated tag！！！");
+		if(Object.keys(result.repeatedTag).length > 0){
+			warning("There are duplicate tags")
+			console.log(result.repeatedTag)
+		}
+		if(Object.keys(result.illegalTag).length > 0){
+			error("Illegal data appeared")
+			console.log(result.illegalTag)
 		}
 		return result
 	} else {
@@ -42,6 +45,10 @@ export async function main(check: boolean, options: Option, dir = "src" ) {
 			if(Object.keys(result.repeatedTag).length > 0){
 				warning("There are duplicate tags")
 				console.log(result.repeatedTag)
+			}
+			if(Object.keys(result.illegalTag).length > 0){
+				error("Illegal data appeared")
+				console.log(result.illegalTag)
 			}
 		} else {
 			error("execution error");

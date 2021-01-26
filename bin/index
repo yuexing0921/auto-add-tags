@@ -27,13 +27,17 @@ const yargs = require("yargs").options({
 		demandOption: true,
 		default: "data-xt",
 	},
-	projectId: {
-		alias: "p",
-		describe:
-			"The project id, will default to 1000000, will increase automatically",
+	min: {
+		describe: "The starting value of automatically adding tags, the default value is 0",
 		type: "number",
 		demandOption: true,
-		default: 1000000,
+		default: 0,
+	},
+	max:{
+		describe:"The maximum value of automatically added tags, the default value is Number.MAX_SAFE_INTEGER",
+		type: "number",
+		demandOption: true,
+		default: 9007199254740991,
 	},
 	elementNames: {
 		alias: "e",
@@ -72,7 +76,7 @@ if (!result) {
 const options = {
 	type: argv.type,
 	tagName: argv.tagName,
-	projectId: argv.projectId,
+	start: argv.start,
 	resultFile: argv.resultFile,
 	elementNames: argv.elementNames,
 	eventNames: argv.eventNames

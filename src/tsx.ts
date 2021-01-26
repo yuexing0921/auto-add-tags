@@ -77,7 +77,7 @@ export class ModifyTsxAST extends Base {
 
       const map = this.totalTag(fileSources);
 
-      return this.getRepeatedTag(map);
+      return this.checkedTag(map);
     } catch (err) {
       throw err;
     }
@@ -123,34 +123,21 @@ export class ModifyTsxAST extends Base {
       );
 
       // 2.
-      let maxPoint = -1;
+      let maxPoint = this.option.min;
       fileSources.forEach(item => {
         // 查找符合条件（this.option.tagName）的组件
         const root = this.findTags(item.root);
         root.forEach(p => {
           const value = p.value.value.value;
           // 获取最大埋点
-          if (value > maxPoint) {
+          if (value > maxPoint && value < this.option.max) {
             maxPoint = value;
           }
         });
       });
-      // const { projectId } = this.option;
-
-      // 如果最大的埋点要比项目ID要小，则最大埋点用项目Id
-      // if (maxPoint < projectId) {
-      //   maxPoint = projectId;
-      // }
+      
       this.data.maxPoint = Number(maxPoint);
-      this.data.regEvent = new RegExp(
-        `^(${this.option.eventNames.join("|")})+$`,
-        "i",
-      );
-      this.data.regElement = new RegExp(
-        `^(${this.option.elementNames.join("|")})+$`,
-        "i",
-      );
-
+    
       //3. 依次遍历file，然后插入埋点
       for (let i = 0; i < fileSources.length; i++) {
         const f = fileSources[i];
@@ -167,12 +154,12 @@ export class ModifyTsxAST extends Base {
       ));
 
       // 5.
-      const repeatedTag = this.getRepeatedTag(map);
+      const checkData = this.checkedTag(map);
 
       // const oldData = await readJson(this.option.resultFile);
       const newData = {
+        ...checkData,
         map,
-        repeatedTag,
         maxPoint: this.data.maxPoint,
       };
       writeFile(this.option.resultFile, JSON.stringify(newData, null, 2));
