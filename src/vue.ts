@@ -31,14 +31,21 @@ export class ModifyVueAST extends Base {
         if (node.tag && node.tag === "script") {
           return false;
         }
+        const index = node?.props?.findIndex(p => p.name === this.option.tagName) || -1
         // 把已经埋点的的节点进行过滤
-        if (node?.props?.find(p => p.name === this.option.tagName)) {
+        if (!this.option.force && index > -1) {
           return false;
         }
-        // 符合条件的事件
-        if (
+        // 如果需要强制更新节点的值
+        if(this.option.force &&  index > -1){
+          node.props.splice(index,1)
+          const value = this.data.maxPoint++;
+          node.props.push(this.genTzTag(value));
+          isPoint = true;
+        }else if (
           node?.props?.find(p => p?.arg?.content?.match(this.data.regEvent))
         ) {
+          // 符合条件的事件
           const value = this.data.maxPoint++;
           node.props.push(this.genTzTag(value));
           isPoint = true;

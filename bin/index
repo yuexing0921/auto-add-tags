@@ -39,6 +39,12 @@ const yargs = require("yargs").options({
 		demandOption: true,
 		default: 9007199254740991,
 	},
+	force: {
+		alias: "f",
+		describe: "force updates",
+		type: "boolean",
+		default: false,
+	},
 	elementNames: {
 		alias: "e",
 		describe:
@@ -78,6 +84,7 @@ const options = {
 	tagName: argv.tagName,
 	min: argv.min,
 	max: argv.max,
+	force: argv.force,
 	resultFile: argv.resultFile,
 	elementNames: argv.elementNames,
 	eventNames: argv.eventNames

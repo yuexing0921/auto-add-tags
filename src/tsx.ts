@@ -20,10 +20,16 @@ export class ModifyTsxAST extends Base {
     const openingElement = p.value.openingElement;
     try {
       const attributes = openingElement.attributes || [];
+      const index = attributes.findIndex(attr => attr?.name?.name === this.option.tagName) || -1
       // @ts-ignore
-      if (attributes.find(attr => attr?.name?.name === this.option.tagName)) {
+      if (!this.option.force && index > -1) {
         // 如果已经埋点了，就不需要再埋点了
         return false;
+      }
+      if (!this.option.force && index > -1) {
+        // 如果是强制更新的情况下，对节点进行加工
+        attributes.splice(index,1)
+        return true
       }
 
       // 传入的事件名，默认是onclick|onsubmit

@@ -6,6 +6,7 @@ export interface Option {
   resultFile: string;
   min: number;
   max: number;
+  force: boolean;
 }
 
 export interface TagInfo {
