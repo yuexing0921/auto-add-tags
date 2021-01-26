@@ -39,19 +39,19 @@ export class ModifyVueAST extends Base {
         // 如果需要强制更新节点的值
         if(this.option.force &&  index > -1){
           node.props.splice(index,1)
-          const value = this.data.maxPoint++;
+          const value = this.data.nextPoint++;
           node.props.push(this.genTzTag(value));
           isPoint = true;
         }else if (
           node?.props?.find(p => p?.arg?.content?.match(this.data.regEvent))
         ) {
           // 符合条件的事件
-          const value = this.data.maxPoint++;
+          const value = this.data.nextPoint++;
           node.props.push(this.genTzTag(value));
           isPoint = true;
         } else if (node?.tag?.match(this.data.regElement)) {
           // 符合条件的组件
-          const value = this.data.maxPoint++;
+          const value = this.data.nextPoint++;
           node.props.push(this.genTzTag(value));
           isPoint = true;
         }
@@ -142,20 +142,20 @@ export class ModifyVueAST extends Base {
       );
 
       // 2.
-      let maxPoint = this.option.min;
+      let nextPoint = this.option.min;
       fileSources.forEach(item => {
         // 查找符合条件（this.option.tagName）的组件
         const root = this.findTags(item.root);
         root.forEach(p => {
           const value = Number(p.value?.content) || -1;
           // 获取最大埋点
-          if (value > maxPoint && value < this.option.max) {
-            maxPoint = value;
+          if (value > nextPoint && value < this.option.max) {
+            nextPoint = value;
           }
         });
       });
       
-      this.data.maxPoint = Number(maxPoint);
+      this.data.nextPoint = Number(nextPoint + 1);
 
       //3. 依次遍历file，然后插入埋点
       for (let i = 0; i < fileSources.length; i++) {
@@ -177,7 +177,7 @@ export class ModifyVueAST extends Base {
       const newData = {
         ...checkData,
         map,
-        maxPoint: this.data.maxPoint,
+        nextPoint: this.data.nextPoint,
       };
       writeFile(this.option.resultFile, JSON.stringify(newData, null, 2));
       return newData;

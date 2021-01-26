@@ -32,7 +32,7 @@ export interface PointInfo {
   path?: string;
 }
 export interface AutoPointData {
-  maxPoint: number;
+  nextPoint: number;
   regEvent?: RegExp;
   regElement?: RegExp;
   map: { [path: string]: PointInfo[] };
@@ -42,14 +42,14 @@ export abstract class Base {
   option: Option;
   files: string[];
   data: AutoPointData = {
-    maxPoint: -1,
+    nextPoint: -1,
     map: {},
   };
   constructor(option: Option,files: string[]) {
     this.option = option;
     this.files = files;
     this.data.regEvent = new RegExp(
-      `^(${this.option.eventNames.join("|")})+$`,
+      `(${this.option.eventNames.join("|")})+$`,
       "i",
     );
     this.data.regElement = new RegExp(
