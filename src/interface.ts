@@ -74,7 +74,6 @@ export abstract class Base {
         if (tempObj.length > 0) {
           repeatedTag[k.value] = tempObj
         }
-        console.log(k.value , min,k.value < min, k.value > max)
         if(k.value < min || k.value > max){
           const t = illegalTag[k.value] || []
           t.push({

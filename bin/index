@@ -76,7 +76,8 @@ if (!result) {
 const options = {
 	type: argv.type,
 	tagName: argv.tagName,
-	start: argv.start,
+	min: argv.min,
+	max: argv.max,
 	resultFile: argv.resultFile,
 	elementNames: argv.elementNames,
 	eventNames: argv.eventNames
