@@ -26,7 +26,6 @@ export interface IllegalTag {
   [tagKey: number]: IllegalTagInfo[];
 }
 
-
 export interface PointInfo {
   value: number;
   line: number;
@@ -46,7 +45,7 @@ export abstract class Base {
     nextPoint: -1,
     map: {},
   };
-  constructor(option: Option,files: string[]) {
+  constructor(option: Option, files: string[]) {
     this.option = option;
     this.files = files;
     this.data.regEvent = new RegExp(
@@ -57,7 +56,6 @@ export abstract class Base {
       `^(${this.option.elementNames.join("|")})+$`,
       "i",
     );
-
   }
   /**
    * 遍历重复埋点的数据，防止重复埋点
@@ -65,36 +63,41 @@ export abstract class Base {
    */
   protected checkedTag(map: { [path: string]: PointInfo[] }) {
     const repeatedTag: RepeatedTag = {};
-    const illegalTag: IllegalTag = {}
+    const illegalTag: IllegalTag = {};
     const temp: any = {};
-    const {max,min} = this.option
+    const { max, min } = this.option;
     // 第一层单个文件循环
     Object.keys(map).forEach(path => {
       // 第二层获取文件内的埋点
       map[path].forEach(k => {
         const tempObj = temp[k.value] || [];
         if (tempObj.length > 0) {
-          repeatedTag[k.value] = tempObj
+          repeatedTag[k.value] = tempObj;
         }
-        if(k.value < min || k.value > max){
-          const t = illegalTag[k.value] || []
+        if (k.value < min || k.value > max) {
+          const t = illegalTag[k.value] || [];
           t.push({
             line: Number(k.line),
             path: path,
-            msg: "Exceeded the maximum and minimum limits"  + " max:" + max + " min:" + min
-          })
-          illegalTag[k.value] = t
+            msg:
+              "Exceeded the maximum and minimum limits" +
+              " max:" +
+              max +
+              " min:" +
+              min,
+          });
+          illegalTag[k.value] = t;
         }
         tempObj.push({
           line: k.line,
           path: path,
         });
-        temp[k.value] = tempObj
+        temp[k.value] = tempObj;
       });
     });
     return {
       repeatedTag,
-      illegalTag
+      illegalTag,
     };
   }
   abstract run();

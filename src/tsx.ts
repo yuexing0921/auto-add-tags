@@ -20,7 +20,10 @@ export class ModifyTsxAST extends Base {
     const openingElement = p.value.openingElement;
     try {
       const attributes = openingElement.attributes || [];
-      const index = attributes.findIndex(attr => attr?.name?.name === this.option.tagName) || -1
+      const index =
+        attributes.findIndex(
+          attr => attr?.name?.name === this.option.tagName,
+        ) || -1;
       // @ts-ignore
       if (!this.option.force && index > -1) {
         // 如果已经埋点了，就不需要再埋点了
@@ -28,8 +31,8 @@ export class ModifyTsxAST extends Base {
       }
       if (!this.option.force && index > -1) {
         // 如果是强制更新的情况下，对节点进行加工
-        attributes.splice(index,1)
-        return true
+        attributes.splice(index, 1);
+        return true;
       }
 
       // 传入的事件名，默认是onclick|onsubmit
@@ -123,10 +126,7 @@ export class ModifyTsxAST extends Base {
   public async run() {
     try {
       // 1.
-      const fileSources = await getSourcesInfo(
-        this.files,
-        this.option.type,
-      );
+      const fileSources = await getSourcesInfo(this.files, this.option.type);
 
       // 2.
       let nextPoint = this.option.min;
@@ -141,9 +141,9 @@ export class ModifyTsxAST extends Base {
           }
         });
       });
-      
+
       this.data.nextPoint = Number(nextPoint + 1);
-    
+
       //3. 依次遍历file，然后插入埋点
       for (let i = 0; i < fileSources.length; i++) {
         const f = fileSources[i];
@@ -153,11 +153,10 @@ export class ModifyTsxAST extends Base {
         await writeFile(f.path, source);
       }
 
-      // 4. 
-      const map = this.totalTag(await getSourcesInfo(
-        this.files,
-        this.option.type,
-      ));
+      // 4.
+      const map = this.totalTag(
+        await getSourcesInfo(this.files, this.option.type),
+      );
 
       // 5.
       const checkData = this.checkedTag(map);

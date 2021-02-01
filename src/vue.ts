@@ -4,11 +4,10 @@ import {
   createSimpleExpression,
 } from "@vuedx/template-ast-types";
 import { AttributeNode } from "@vue/compiler-dom";
-import {  PointInfo, Base } from "./interface";
+import { PointInfo, Base } from "./interface";
 import { getSourcesInfo, writeFile, error, FileInfo } from "./utils";
 
 export class ModifyVueAST extends Base {
-  
   /**
    * 用于生成埋点的tag
    * @param {*} j
@@ -31,18 +30,19 @@ export class ModifyVueAST extends Base {
         if (node.tag && node.tag === "script") {
           return false;
         }
-        const index = node?.props?.findIndex(p => p.name === this.option.tagName) || -1
+        const index =
+          node?.props?.findIndex(p => p.name === this.option.tagName) || -1;
         // 把已经埋点的的节点进行过滤
         if (!this.option.force && index > -1) {
           return false;
         }
         // 如果需要强制更新节点的值
-        if(this.option.force &&  index > -1){
-          node.props.splice(index,1)
+        if (this.option.force && index > -1) {
+          node.props.splice(index, 1);
           const value = this.data.nextPoint++;
           node.props.push(this.genTzTag(value));
           isPoint = true;
-        }else if (
+        } else if (
           node?.props?.find(p => p?.arg?.content?.match(this.data.regEvent))
         ) {
           // 符合条件的事件
@@ -136,10 +136,7 @@ export class ModifyVueAST extends Base {
   public async run() {
     try {
       // 1.
-      const fileSources = await getSourcesInfo(
-        this.files,
-        this.option.type,
-      );
+      const fileSources = await getSourcesInfo(this.files, this.option.type);
 
       // 2.
       let nextPoint = this.option.min;
@@ -154,7 +151,7 @@ export class ModifyVueAST extends Base {
           }
         });
       });
-      
+
       this.data.nextPoint = Number(nextPoint + 1);
 
       //3. 依次遍历file，然后插入埋点
@@ -167,10 +164,9 @@ export class ModifyVueAST extends Base {
       }
 
       // 4.
-      const map = this.totalTag(await getSourcesInfo(
-        this.files,
-        this.option.type,
-      ));
+      const map = this.totalTag(
+        await getSourcesInfo(this.files, this.option.type),
+      );
       // 5.
       const checkData = this.checkedTag(map);
 
