@@ -4,6 +4,17 @@ import { ModifyVueAST } from "./vue";
 import { success, log, warning, error,isFile } from "./utils";
 import { Option } from  "./interface"
 
+export const defaultOption: Option = {
+	dir : "src",
+	type: "react",
+	tagName: "data-xt",
+	min: 0,
+	max: Number.MAX_SAFE_INTEGER,
+	force: false,
+	resultFile: "tracePoint.json",
+	elementNames: ["a", "link", "route"],
+	eventNames:  ["click", "submit", "change"]
+  }
 
 /**
  * 
@@ -11,9 +22,9 @@ import { Option } from  "./interface"
  * @param options 
  * @param dir // 需要查找的代码目录, 也可以是直接某个代码文件
  */
-export async function main(check: boolean, options: Option, dir = "src" ) {
+export async function main(options: Option = defaultOption,check: boolean = false) {
     
-    const files = await getFiles(dir, options.type)
+    const files = await getFiles(options.dir, options.type)
 
 	let modifyAST = options.type === 'react' ? new ModifyTsxAST(options, files): new ModifyVueAST(options, files)
 	

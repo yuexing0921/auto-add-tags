@@ -1,4 +1,5 @@
 export interface Option {
+  dir: string;
   type: "react" | "vue" | "miniprogram";
   tagName: string;
   elementNames: string[]; // 组件名

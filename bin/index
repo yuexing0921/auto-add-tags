@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fse = require("fs-extra");
 const {  warning, error } = require("../dist/utils");
-const { main } = require("../dist/index")
+const { main, defaultOption } = require("../dist/index")
 
 
 const yargs = require("yargs").options({
@@ -11,7 +11,7 @@ const yargs = require("yargs").options({
 			"The directory or file to be converted, the default is the current src directory",
 		type: "string",
 		demandOption: true,
-		default: "src",
+		default: defaultOption.dir,
 	},
 	type: {
 		alias: "t",
@@ -19,44 +19,44 @@ const yargs = require("yargs").options({
 			"The supported type is react by default, and you can also enter vue|react",
 		type: "string",
 		demandOption: true,
-		default: "react",
+		default: defaultOption.type,
 	},
 	tagName: {
 		describe: "Automatically insert tags, the default value is data-xt",
 		type: "string",
 		demandOption: true,
-		default: "data-xt",
+		default: defaultOption.tagName,
 	},
 	min: {
 		describe: "The starting value of automatically adding tags, the default value is 0",
 		type: "number",
 		demandOption: true,
-		default: 0,
+		default: defaultOption.min,
 	},
 	max:{
 		describe:"The maximum value of automatically added tags, the default value is Number.MAX_SAFE_INTEGER",
 		type: "number",
 		demandOption: true,
-		default: 9007199254740991,
+		default: defaultOption.max,
 	},
 	force: {
 		alias: "f",
 		describe: "force updates",
 		type: "boolean",
-		default: false,
+		default: defaultOption.force,
 	},
 	elementNames: {
 		alias: "e",
 		describe:
 			"Which components need to be tracked? not case sensitive，the default value is [link,a,route]  -e link a route",
 		type: "array",
-		default: ["a", "link", "route"]
+		default: defaultOption.elementNames
 	},
 	eventNames: {
 		describe:
 			"What events need to be tracked? not case sensitive。 the default value is [onclick,onsubmit]  --eventNames onclick onsubmit",
 		type: "array",
-		default: ["click", "submit"]
+		default: defaultOption.eventNames
 	},
 	check: {
 		alias: "c",
@@ -68,7 +68,7 @@ const yargs = require("yargs").options({
 		alias: "r",
 		describe: "Insert point record",
 		type: "string",
-		default: "tracePoint.json",
+		default: defaultOption.resultFile,
 	}
 })
 
@@ -80,6 +80,7 @@ if (!result) {
 	process.exit(1);
 }
 const options = {
+	dir: argv.dir,
 	type: argv.type,
 	tagName: argv.tagName,
 	min: argv.min,
@@ -89,4 +90,4 @@ const options = {
 	elementNames: argv.elementNames,
 	eventNames: argv.eventNames
 };
-main(argv.check, options, argv.dir)
+main(options, argv.check)
