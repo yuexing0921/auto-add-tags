@@ -17,7 +17,7 @@ export class ModifyTsxAST extends Base {
    * 判断这个element是否是埋点tag
    */
   private JSXElementIsTzTag(p: any, path: string) {
-    const openingElement = p.value.openingElement;
+    const { openingElement } = p.node;
     try {
       const attributes = openingElement.attributes || [];
       const index =
@@ -29,7 +29,7 @@ export class ModifyTsxAST extends Base {
         // 如果已经埋点了，就不需要再埋点了
         return false;
       }
-      if (!this.option.force && index > -1) {
+      if (this.option.force && index > -1) {
         // 如果是强制更新的情况下，对节点进行加工
         attributes.splice(index, 1);
         return true;
@@ -134,7 +134,7 @@ export class ModifyTsxAST extends Base {
         // 查找符合条件（this.option.tagName）的组件
         const root = this.findTags(item.root);
         root.forEach(p => {
-          const value = p.value.value.value;
+          const value = Number(p.value.value.value) || -1;
           // 获取最大埋点
           if (value > nextPoint && value < this.option.max) {
             nextPoint = value;
@@ -142,7 +142,7 @@ export class ModifyTsxAST extends Base {
         });
       });
 
-      this.data.nextPoint = Number(nextPoint + 1);
+      this.data.nextPoint = Number(nextPoint) + 1;
 
       //3. 依次遍历file，然后插入埋点
       for (let i = 0; i < fileSources.length; i++) {
