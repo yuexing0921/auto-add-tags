@@ -152,7 +152,7 @@ export class ModifyVueAST extends Base {
         });
       });
 
-      this.data.nextPoint = Number(nextPoint + 1);
+      this.data.nextPoint = Number(nextPoint) + 1;
 
       //3. 依次遍历file，然后插入埋点
       for (let i = 0; i < fileSources.length; i++) {
