@@ -1,6 +1,6 @@
 {
   "name": "auto-add-tags",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Obtain AST by reading vue and react source code, and then dynamically add tags",
   "bin": {
     "aat": "./bin/index",
